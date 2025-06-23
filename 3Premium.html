@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Premium Tasks</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f4f6f8, #e6ebf0);
+      padding: 40px;
+      text-align: center;
+      color: #333;
+    }
+
+    .mainContainer {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    #userEmailDisplay {
+      font-size: 16px;
+      margin: 10px 0 30px;
+      color: #007bff;
+    }
+
+    #dateTime {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .task-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .task {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      width: 220px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .task:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .task img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    .task h3 {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .task button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .task button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .task.completed {
+      background-color: #e6ffe6;
+      border-color: #28a745;
+      box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+    }
+
+    .task.completed h3 {
+      color: #28a745;
+    }
+
+    .task.completed img {
+      filter: grayscale(100%) brightness(0.85);
+    }
+
+    .task.completed button {
+      background-color: #28a745;
+      box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .task.completed button:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+
+    .email-form {
+      margin-top: 50px;
+    }
+
+    .email-form input[type="email"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .email-form button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .email-form button:hover {
+      background-color: #0056b3;
+    }
+
+    #userEmailDisplay.email, 
+    #dateTime.datetime {
+    display: inline-block;
+    background-color: #ffffff;
+    /*border-left: 5px solid #007bff;*/
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    /*
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    */
+    max-width: 90%;
+    }
+
+    #userEmailDisplay.email {
+    color: #007bff;
+    font-weight: 500;
+    }
+
+    #dateTime.datetime {
+    color: #555;
+    font-style: bold;
+    /*border-left-color: #6c757d;*/
+    }
+
+    .screenshot-button {
+            /*display: block; */
+            margin: 15px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #7256b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+    }
+
+  </style>
+</head>
+<body>
+   
+<button class="screenshot-button" onclick="captureMain()">📸 Capture SS </button>
+    <div id="notification" style="display: none; position: fixed; top: 20px; right: 20px; background: #3f47b4; color: white; padding: 15px; border-radius: 5px; z-index: 1000;">
+        Image copied to clipboard!
+    </div>
+
+<div class="mainContainer">
+  <h1>Milestone Reached – Level Unlocked To Become Official Member</h1>
+  <div id="userEmailDisplay" class="email">Your email will appear here once submitted.</div>
+  <div id="dateTime" class="datetime">Loading date and time...</div>
+
+  <div class="task-container">
+    <div class="task" id="task1">
+      <img src="img1.jpg" alt="Task 1">
+      <h3>Premium Task 1</h3>
+      <button onclick="toggleTask('task1')">Complete</button>
+    </div>
+
+    <div class="task" id="task2">
+      <img src="img1.jpg" alt="Task 2">
+      <h3>Premium Task 2</h3>
+      <button onclick="toggleTask('task2')">Complete</button>
+    </div>
+
+    <div class="task" id="task3">
+      <img src="img1.jpg" alt="Task 3">
+      <h3>Premium Task 3</h3>
+      <button onclick="toggleTask('task3')">Complete</button>
+    </div>
+  </div>
+</div>
+  <div class="email-form">
+    <input type="email" id="emailInput" placeholder="Enter your email" required>
+    <button onclick="submitEmail()">Submit</button>
+  </div>
+
+  <script>
+    // Toggle Task Completion
+    function toggleTask(taskId) {
+      const task = document.getElementById(taskId);
+      const button = task.querySelector("button");
+
+      const isCompleted = task.classList.toggle("completed");
+
+      button.textContent = isCompleted ? "Completed" : "Complete";
+    }
+
+    // Submit Email
+    function submitEmail() {
+      const email = document.getElementById("emailInput").value;
+      const display = document.getElementById("userEmailDisplay");
+
+      if (email) {
+        display.textContent = `📧 Logged in as: ${email}`;
+      } else {
+        display.textContent = "Please enter a valid email address.";
+      }
+    }
+
+    // Update Date and Time
+    function updateDateTime() {
+      const now = new Date();
+      const formatted = now.toLocaleString('en-IN', {
+        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      document.getElementById("dateTime").textContent = `⏰ Current Date & Time: ${formatted}`;
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime(); // Initial call
+
+    // Improved screenshot functions
+        async function captureMain() {
+            try {
+                // Check if clipboard-write permission is granted
+                const permissionStatus = await navigator.permissions.query({
+                    name: 'clipboard-write'
+                });
+                
+                if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
+                    const element = document.querySelector('.mainContainer');
+                    await captureElement(element, ' ');
+                } else {
+                    showToast('❌ Clipboard permission not granted');
+                }
+            } catch (err) {
+                console.error('Permission check failed:', err);
+                // Fallback to trying anyway
+                const element = document.querySelector('.mainContainer');
+                await captureElement(element, ' ');
+            }
+        }
+
+        // Generic capture function with improved error handling
+        
+        async function captureElement(element, sectionName = '') {
+            if (!element) {
+                alert('Element not found for screenshot');
+                return;
+            }
+
+            // Store original styles
+            const originalStyles = {
+                boxShadow: element.style.boxShadow,
+                tasks: []
+            };
+
+            // Remove all box shadows from main container
+            element.style.boxShadow = 'none';
+
+            // Remove box shadows from all task elements
+            const tasks = element.querySelectorAll('.task');
+            tasks.forEach(task => {
+                originalStyles.tasks.push({
+                    element: task,
+                    boxShadow: task.style.boxShadow
+                });
+                task.style.boxShadow = 'none';
+            });
+
+            try {
+                const canvas = await html2canvas(element, {
+                    backgroundColor: "#ffffff", // Changed to white to match your container
+                    scale: 1,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true
+                });
+
+                // Convert canvas to blob
+                canvas.toBlob(async (blob) => {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({ 'image/png': blob })
+                        ]);
+                        showToast(`📋 ${sectionName} Screenshot copied to clipboard!`);
+                    } catch (err) {
+                        console.error('Clipboard write failed:', err);
+                        saveAsImage(canvas, sectionName);
+                    }
+                }, 'image/png');
+            } catch (err) {
+                console.error('Screenshot failed:', err);
+                showToast(`❌ Failed to capture ${sectionName}: ${err.message}`);
+            } finally {
+                // Restore original styles
+                element.style.boxShadow = originalStyles.boxShadow;
+                originalStyles.tasks.forEach(taskStyle => {
+                    taskStyle.element.style.boxShadow = taskStyle.boxShadow;
+                });
+            }
+        }
+
+        // Fallback function to save as image file
+        function saveAsImage(canvas, name) {
+            const link = document.createElement('a');
+            link.download = `${name || 'screenshot'}-${new Date().toISOString()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast(`📋 ${name} screenshot saved as file (clipboard not available)`);
+        }
+
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.getElementById('notification');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+  </script>
+
+</body>
+</html>
